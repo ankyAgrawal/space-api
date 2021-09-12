@@ -14,6 +14,62 @@ describe('Space test suite', () => {
 
     // Insert other tests below this line
 
+    it('tests /space/flights/seats endpoint - starship', async () => {
+        const response = await request(app).get("/space/flights/seats");
+        expect(response.body.starship).toEqual(expect.arrayContaining([expect.any(Object)]));
+        // Checking that the starship Object contains firstClass Object which then contains a set of objects
+        expect(response.body.starship).toEqual(expect.arrayContaining(
+            [expect.objectContaining({ firstClass: expect.any(Object) })]));
+
+        expect(response.body.starship).toEqual(expect.arrayContaining([expect.objectContaining(
+            { businessClass: expect.any(Object) })]));
+
+        // Checking that under the bussinessClass Object we have the array drinks served
+        expect(response.body.starship)
+            .toEqual(expect.arrayContaining([expect.objectContaining({
+                businessClass: expect.objectContaining({ drinksServed: expect.any(Array) })
+            })]));
+
+        // Checking that under the firstClass: Object we have the option ludacris in the seatHover Object
+        expect(response.body.starship)
+            .toEqual(expect.arrayContaining([expect.objectContaining({
+                firstClass: expect.objectContaining({
+                    seatHover: expect.objectContaining({
+                        cryoMode: expect.arrayContaining(['ludacris'])
+                    })
+                })
+            })]));
+
+        // Checking that under the firstClass: Object we have the option plaid in the seatHover Object
+        expect(response.body.starship)
+            .toEqual(expect.arrayContaining([expect.objectContaining({
+                firstClass: expect.objectContaining({
+                    seatHover: expect.objectContaining({
+                        staticMode: expect.arrayContaining(['plaid'])
+                    })
+                })
+            })]));
+    });
+
+    expect.extend({
+        toBeActive(received) {
+            const pass = received === true;
+            if (pass) {
+                return {
+                    message: () =>
+                        `expected ${received} to be an acceptable flight status`,
+                    pass: true,
+                };
+            } else {
+                return {
+                    message: () =>
+                        `expected ${received} to be an acceptable flight status of flight - only true is acceptable`,
+                    pass: false,
+                };
+            }
+        },
+    });
+
     // Insert other tests above this line
 
 });
