@@ -70,6 +70,21 @@ describe('Space test suite', () => {
         },
     });
 
+    it('tests /space/flights endpoint - positive test', async () => {
+        const response = await request(app).get("/space/flights");
+        expect(response.body[0].active).toBeActive();
+    });
+
+    it.skip('tests /space/flights endpoint - false negative', async () => {
+        const response = await request(app).get("/space/flights");
+        expect(response.body[0].active).not.toBeActive();
+    });
+
+    it.skip('tests /space/flights endpoint - failing test', async () => {
+        const response = await request(app).get("/space/flights");
+        expect(response.body[1].active).toBeActive();
+    });
+
     // Insert other tests above this line
 
 });
